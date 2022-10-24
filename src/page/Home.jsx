@@ -10,11 +10,18 @@ const Home = () => {
 
 	const onClickVideo = async () => {
 		const res = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=${apiKey}`);
-		console.log(res.data);
 	};
 
 	const onClickLogout = () => {
 		console.log("로그아웃");
+		if (prevToken) {
+			console.log(prevToken);
+			axios.post(`https://oauth2.googleapis.com/revoke?token=${prevToken}`).then((res) => {
+				setIsLoggedIn(false);
+				localStorage.setItem("accessToken", "");
+				alert("로그아웃~");
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -37,6 +44,18 @@ const Home = () => {
 		}
 	}, [prevToken]);
 
+	useEffect(() => {
+		axios.defaults.headers.common["Authorization"] = `Bearer ${prevToken}`;
+		const getSubscribers = async () => {
+			await axios.get("https://www.googleapis.com/youtube/v3/channels").then((res) => {
+				console.log(res);
+			});
+		};
+		if (isLoggedIn) {
+			getSubscribers();
+		}
+	}, [isLoggedIn, prevToken]);
+
 	return (
 		<>
 			<h1>youtube test</h1>
@@ -50,6 +69,7 @@ const Home = () => {
 				)}
 				<button onClick={onClickVideo}>비디오</button>
 			</div>
+			{isLoggedIn && <div>구독자 수 :</div>}
 			{/* <iframe
 				width="560"
 				height="315"
