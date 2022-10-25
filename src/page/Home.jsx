@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import CloseIcon from "../icons/CloseIcon";
 
 const Home = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const prevToken = localStorage.getItem("accessToken");
 	const clientId = process.env.REACT_APP_CLIENT_ID;
-	const apiKey = process.env.REACT_APP_API_KEY;
+	// const apiKey = process.env.REACT_APP_API_KEY;
 	const url = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=https://localhost:3000/complete&scope=https://www.googleapis.com/auth/youtube.readonly&response_type=token`;
 
 	const onClickVideo = async () => {
-		const res = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=${apiKey}`);
+		// const res = await axios.get(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=${apiKey}`);
 	};
 
 	const onClickLogout = () => {
@@ -44,21 +45,22 @@ const Home = () => {
 		}
 	}, [prevToken]);
 
-	useEffect(() => {
-		axios.defaults.headers.common["Authorization"] = `Bearer ${prevToken}`;
-		const getSubscribers = async () => {
-			await axios.get("https://www.googleapis.com/youtube/v3/channels").then((res) => {
-				console.log(res);
-			});
-		};
-		if (isLoggedIn) {
-			getSubscribers();
-		}
-	}, [isLoggedIn, prevToken]);
+	// useEffect(() => {
+	// 	axios.defaults.headers.common["Authorization"] = `Bearer ${prevToken}`;
+	// 	const getSubscribers = () => {
+	// 		axios.get("https://www.googleapis.com/auth/userinfo.profile").then((res) => {
+	// 			console.log(res);
+	// 		});
+	// 	};
+	// 	if (isLoggedIn) {
+	// 		getSubscribers();
+	// 	}
+	// }, [isLoggedIn, prevToken]);
 
 	return (
 		<>
 			<h1>youtube test</h1>
+			<CloseIcon />
 			<div style={{ display: "flex", flexDirection: "column", width: "20%" }}>
 				{isLoggedIn ? (
 					<button onClick={onClickLogout}>로그아웃</button>
@@ -69,7 +71,13 @@ const Home = () => {
 				)}
 				<button onClick={onClickVideo}>비디오</button>
 			</div>
-			{isLoggedIn && <div>구독자 수 :</div>}
+			<button
+				onClick={() => {
+					axios.get(`https://www.googleapis.com/auth/userinfo.profile`).then((res) => console.log(res));
+				}}
+			>
+				정보
+			</button>
 			{/* <iframe
 				width="560"
 				height="315"
