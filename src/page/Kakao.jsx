@@ -15,7 +15,6 @@ const Kakao = () => {
 	//인가코드로 엑세스토큰받기
 	useEffect(() => {
 		function getToken(_code) {
-			console.log(code, "확인");
 			axios
 				.post(`https://kauth.kakao.com/oauth/token?grant_type=${grant_type}&client_id=${clientId}&redirect_uri=${redirectUri}&code=${_code}`)
 				.then(({ data }) => setToken(data.access_token));

@@ -1,14 +1,13 @@
 import React from "react";
 
 const NaverTest = () => {
-	const kakaoClientId = process.env.REACT_APP_KAKAO_CLIENT_ID;
-	const kakaoRedirectUri = "http://localhost:3000/naver";
-	const kakaohref = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}
-&redirect_uri=${kakaoRedirectUri}&response_type=code`;
+	const naverClientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+	const naverRedirectUri = "http://localhost:3000/naver";
+	const naverhref = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${naverClientId}&state=12ds1fas&redirect_uri=${naverRedirectUri}`;
 
 	return (
 		<div style={{ marginTop: "30px" }}>
-			<a href={kakaohref}>
+			<a href={naverhref}>
 				<button>네이버 로그인 하기</button>
 			</a>
 		</div>
